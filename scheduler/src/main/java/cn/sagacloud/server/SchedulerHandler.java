@@ -7,8 +7,8 @@ package cn.sagacloud.server;
 import cn.sagacloud.pojo.ChannelHandlerContextWrapper;
 import cn.sagacloud.pojo.Command;
 import cn.sagacloud.pojo.TaskStatus;
-import cn.sagacloud.proto.MessageUtil;
 import cn.sagacloud.proto.MessageProto;
+import cn.sagacloud.proto.MessageUtil;
 import cn.sagacloud.utils.CommonUtil;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -70,7 +70,7 @@ public class SchedulerHandler extends ChannelInboundHandlerAdapter {
             MessageProto.Message message = (MessageProto.Message)msg;
             MessageUtil.printMessage(message);
             MessageProto.Message myMsg = MessageUtil.buildMessage(message.getCmd() + 1,
-                    message.getClassName() + " from server",
+                    message.getTaskId(),
                     message.getContent() + " from server");
 
             ctx.writeAndFlush(myMsg);  // 异步

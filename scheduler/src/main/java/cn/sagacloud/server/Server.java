@@ -22,12 +22,15 @@ import io.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
 import org.yaml.snakeyaml.Yaml;
 
 import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Server {
     ServerBootstrap bootstrap = new ServerBootstrap();
     private NioEventLoopGroup acceptGroup = new NioEventLoopGroup();
     private NioEventLoopGroup workerGroup = new NioEventLoopGroup();
     private Channel channel = null;
+    public static ExecutorService pool = Executors.newFixedThreadPool(8);
     Config config;
     ArrayList<ChannelHandlerContextWrapper> clientList = new ArrayList<>();
     public Server(){
@@ -63,7 +66,7 @@ public class Server {
             // 启动服务
             channel = bootstrap.bind(config.getPort()).sync().channel();
 
-
+            //pool.submit()
             channel.closeFuture().sync();
         } finally {
             workerGroup.shutdownGracefully();

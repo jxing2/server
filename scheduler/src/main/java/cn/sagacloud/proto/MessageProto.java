@@ -19,19 +19,19 @@ public final class MessageProto {
       com.google.protobuf.MessageOrBuilder {
 
     /**
-     * <code>int32 cmd = 1;</code>
+     * <code>string cmd = 1;</code>
      */
-    int getCmd();
-
+    java.lang.String getCmd();
     /**
-     * <code>string className = 2;</code>
-     */
-    java.lang.String getClassName();
-    /**
-     * <code>string className = 2;</code>
+     * <code>string cmd = 1;</code>
      */
     com.google.protobuf.ByteString
-        getClassNameBytes();
+        getCmdBytes();
+
+    /**
+     * <code>int32 taskId = 2;</code>
+     */
+    int getTaskId();
 
     /**
      * <code>string content = 3;</code>
@@ -56,7 +56,7 @@ public final class MessageProto {
       super(builder);
     }
     private Message() {
-      className_ = "";
+      cmd_ = "";
       content_ = "";
     }
 
@@ -84,15 +84,15 @@ public final class MessageProto {
             case 0:
               done = true;
               break;
-            case 8: {
-
-              cmd_ = input.readInt32();
-              break;
-            }
-            case 18: {
+            case 10: {
               java.lang.String s = input.readStringRequireUtf8();
 
-              className_ = s;
+              cmd_ = s;
+              break;
+            }
+            case 16: {
+
+              taskId_ = input.readInt32();
               break;
             }
             case 26: {
@@ -134,46 +134,46 @@ public final class MessageProto {
     }
 
     public static final int CMD_FIELD_NUMBER = 1;
-    private int cmd_;
+    private volatile java.lang.Object cmd_;
     /**
-     * <code>int32 cmd = 1;</code>
+     * <code>string cmd = 1;</code>
      */
-    public int getCmd() {
-      return cmd_;
-    }
-
-    public static final int CLASSNAME_FIELD_NUMBER = 2;
-    private volatile java.lang.Object className_;
-    /**
-     * <code>string className = 2;</code>
-     */
-    public java.lang.String getClassName() {
-      java.lang.Object ref = className_;
+    public java.lang.String getCmd() {
+      java.lang.Object ref = cmd_;
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
-        className_ = s;
+        cmd_ = s;
         return s;
       }
     }
     /**
-     * <code>string className = 2;</code>
+     * <code>string cmd = 1;</code>
      */
     public com.google.protobuf.ByteString
-        getClassNameBytes() {
-      java.lang.Object ref = className_;
+        getCmdBytes() {
+      java.lang.Object ref = cmd_;
       if (ref instanceof java.lang.String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
-        className_ = b;
+        cmd_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
       }
+    }
+
+    public static final int TASKID_FIELD_NUMBER = 2;
+    private int taskId_;
+    /**
+     * <code>int32 taskId = 2;</code>
+     */
+    public int getTaskId() {
+      return taskId_;
     }
 
     public static final int CONTENT_FIELD_NUMBER = 3;
@@ -224,11 +224,11 @@ public final class MessageProto {
     @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      if (cmd_ != 0) {
-        output.writeInt32(1, cmd_);
+      if (!getCmdBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 1, cmd_);
       }
-      if (!getClassNameBytes().isEmpty()) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 2, className_);
+      if (taskId_ != 0) {
+        output.writeInt32(2, taskId_);
       }
       if (!getContentBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 3, content_);
@@ -242,12 +242,12 @@ public final class MessageProto {
       if (size != -1) return size;
 
       size = 0;
-      if (cmd_ != 0) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(1, cmd_);
+      if (!getCmdBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, cmd_);
       }
-      if (!getClassNameBytes().isEmpty()) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, className_);
+      if (taskId_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(2, taskId_);
       }
       if (!getContentBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, content_);
@@ -267,10 +267,10 @@ public final class MessageProto {
       }
       cn.sagacloud.proto.MessageProto.Message other = (cn.sagacloud.proto.MessageProto.Message) obj;
 
-      if (getCmd()
-          != other.getCmd()) return false;
-      if (!getClassName()
-          .equals(other.getClassName())) return false;
+      if (!getCmd()
+          .equals(other.getCmd())) return false;
+      if (getTaskId()
+          != other.getTaskId()) return false;
       if (!getContent()
           .equals(other.getContent())) return false;
       if (!unknownFields.equals(other.unknownFields)) return false;
@@ -285,9 +285,9 @@ public final class MessageProto {
       int hash = 41;
       hash = (19 * hash) + getDescriptor().hashCode();
       hash = (37 * hash) + CMD_FIELD_NUMBER;
-      hash = (53 * hash) + getCmd();
-      hash = (37 * hash) + CLASSNAME_FIELD_NUMBER;
-      hash = (53 * hash) + getClassName().hashCode();
+      hash = (53 * hash) + getCmd().hashCode();
+      hash = (37 * hash) + TASKID_FIELD_NUMBER;
+      hash = (53 * hash) + getTaskId();
       hash = (37 * hash) + CONTENT_FIELD_NUMBER;
       hash = (53 * hash) + getContent().hashCode();
       hash = (29 * hash) + unknownFields.hashCode();
@@ -423,9 +423,9 @@ public final class MessageProto {
       @java.lang.Override
       public Builder clear() {
         super.clear();
-        cmd_ = 0;
+        cmd_ = "";
 
-        className_ = "";
+        taskId_ = 0;
 
         content_ = "";
 
@@ -456,7 +456,7 @@ public final class MessageProto {
       public cn.sagacloud.proto.MessageProto.Message buildPartial() {
         cn.sagacloud.proto.MessageProto.Message result = new cn.sagacloud.proto.MessageProto.Message(this);
         result.cmd_ = cmd_;
-        result.className_ = className_;
+        result.taskId_ = taskId_;
         result.content_ = content_;
         onBuilt();
         return result;
@@ -506,12 +506,12 @@ public final class MessageProto {
 
       public Builder mergeFrom(cn.sagacloud.proto.MessageProto.Message other) {
         if (other == cn.sagacloud.proto.MessageProto.Message.getDefaultInstance()) return this;
-        if (other.getCmd() != 0) {
-          setCmd(other.getCmd());
-        }
-        if (!other.getClassName().isEmpty()) {
-          className_ = other.className_;
+        if (!other.getCmd().isEmpty()) {
+          cmd_ = other.cmd_;
           onChanged();
+        }
+        if (other.getTaskId() != 0) {
+          setTaskId(other.getTaskId());
         }
         if (!other.getContent().isEmpty()) {
           content_ = other.content_;
@@ -546,97 +546,97 @@ public final class MessageProto {
         return this;
       }
 
-      private int cmd_ ;
+      private java.lang.Object cmd_ = "";
       /**
-       * <code>int32 cmd = 1;</code>
+       * <code>string cmd = 1;</code>
        */
-      public int getCmd() {
-        return cmd_;
-      }
-      /**
-       * <code>int32 cmd = 1;</code>
-       */
-      public Builder setCmd(int value) {
-        
-        cmd_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>int32 cmd = 1;</code>
-       */
-      public Builder clearCmd() {
-        
-        cmd_ = 0;
-        onChanged();
-        return this;
-      }
-
-      private java.lang.Object className_ = "";
-      /**
-       * <code>string className = 2;</code>
-       */
-      public java.lang.String getClassName() {
-        java.lang.Object ref = className_;
+      public java.lang.String getCmd() {
+        java.lang.Object ref = cmd_;
         if (!(ref instanceof java.lang.String)) {
           com.google.protobuf.ByteString bs =
               (com.google.protobuf.ByteString) ref;
           java.lang.String s = bs.toStringUtf8();
-          className_ = s;
+          cmd_ = s;
           return s;
         } else {
           return (java.lang.String) ref;
         }
       }
       /**
-       * <code>string className = 2;</code>
+       * <code>string cmd = 1;</code>
        */
       public com.google.protobuf.ByteString
-          getClassNameBytes() {
-        java.lang.Object ref = className_;
+          getCmdBytes() {
+        java.lang.Object ref = cmd_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
-          className_ = b;
+          cmd_ = b;
           return b;
         } else {
           return (com.google.protobuf.ByteString) ref;
         }
       }
       /**
-       * <code>string className = 2;</code>
+       * <code>string cmd = 1;</code>
        */
-      public Builder setClassName(
+      public Builder setCmd(
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
   
-        className_ = value;
+        cmd_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>string className = 2;</code>
+       * <code>string cmd = 1;</code>
        */
-      public Builder clearClassName() {
+      public Builder clearCmd() {
         
-        className_ = getDefaultInstance().getClassName();
+        cmd_ = getDefaultInstance().getCmd();
         onChanged();
         return this;
       }
       /**
-       * <code>string className = 2;</code>
+       * <code>string cmd = 1;</code>
        */
-      public Builder setClassNameBytes(
+      public Builder setCmdBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
   checkByteStringIsUtf8(value);
         
-        className_ = value;
+        cmd_ = value;
+        onChanged();
+        return this;
+      }
+
+      private int taskId_ ;
+      /**
+       * <code>int32 taskId = 2;</code>
+       */
+      public int getTaskId() {
+        return taskId_;
+      }
+      /**
+       * <code>int32 taskId = 2;</code>
+       */
+      public Builder setTaskId(int value) {
+        
+        taskId_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>int32 taskId = 2;</code>
+       */
+      public Builder clearTaskId() {
+        
+        taskId_ = 0;
         onChanged();
         return this;
       }
@@ -777,9 +777,9 @@ public final class MessageProto {
   static {
     java.lang.String[] descriptorData = {
       "\n\022MessageProto.proto\022\022cn.sagacloud.proto" +
-      "\":\n\007Message\022\013\n\003cmd\030\001 \001(\005\022\021\n\tclassName\030\002 " +
-      "\001(\t\022\017\n\007content\030\003 \001(\tB\020B\014MessageProtoH\001b\006" +
-      "proto3"
+      "\"7\n\007Message\022\013\n\003cmd\030\001 \001(\t\022\016\n\006taskId\030\002 \001(\005" +
+      "\022\017\n\007content\030\003 \001(\tB\020B\014MessageProtoH\001b\006pro" +
+      "to3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -798,7 +798,7 @@ public final class MessageProto {
     internal_static_cn_sagacloud_proto_Message_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_cn_sagacloud_proto_Message_descriptor,
-        new java.lang.String[] { "Cmd", "ClassName", "Content", });
+        new java.lang.String[] { "Cmd", "TaskId", "Content", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

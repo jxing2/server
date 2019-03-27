@@ -5,15 +5,15 @@ package cn.sagacloud.proto;
  */
 
 public class MessageUtil {
-    public static MessageProto.Message buildMessage(int cmd, String className, String content){
+    public static MessageProto.Message buildMessage(String cmd, int taskId, String content){
         MessageProto.Message.Builder builder = MessageProto.Message.newBuilder();
         builder.setCmd(cmd);
-        builder.setClassName(className);
+        builder.setTaskId(taskId);
         builder.setContent(content);
         return builder.build();
     }
 
     public static void printMessage(MessageProto.Message msg){
-        System.out.println("msg : cmd : " + msg.getCmd() + ", className : " + msg.getClassName() + ", content : " + msg.getContent());
+        System.out.println("msg : cmd : " + msg.getCmd() + ", taskId : " + msg.getTaskId() + ", content : " + msg.getContent());
     }
 }
