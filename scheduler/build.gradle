@@ -1,0 +1,77 @@
+group rootProject.group
+version rootProject.version
+
+apply plugin: 'java'
+//apply plugin: 'org.jetbrains.dokka'
+apply plugin: 'maven'
+apply plugin: 'com.google.protobuf'
+
+sourceCompatibility = JVM_TARGET
+
+//compileKotlin {
+//    kotlinOptions.jvmTarget = JVM_TARGET
+//}
+//compileTestKotlin {
+//    kotlinOptions.jvmTarget = JVM_TARGET
+//}
+
+protobuf {
+    generatedFilesBaseDir = "src"
+    protoc {
+        artifact = "com.google.protobuf:protoc:3.7.0"
+    }
+
+//    plugins {
+//        grpc {
+//            artifact = 'io.grpc:protoc-gen-grpc-java:1.19.0'
+//        }
+//    }
+//    generateProtoTasks {
+//        all()*.plugins {
+//            grpc {}
+//        }
+//    }
+}
+
+dependencies {
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // kotlin 依赖
+//    compile group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib-jdk8', version: KOTLIN_VERSION
+//    compile group: 'org.jetbrains.kotlin', name: 'kotlin-reflect', version: KOTLIN_VERSION
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // 网络操作依赖
+    // https://mvnrepository.com/artifact/io.netty/netty-all
+    compile group: 'io.netty',  name: 'netty-all',  version: NETTY_VERSION
+    // https://mvnrepository.com/artifact/io.grpc/grpc-all
+    //compile group: 'io.grpc',   name: 'grpc-all',   version: GRPC_VERSION
+
+
+    // https://mvnrepository.com/artifact/com.google.protobuf/protoc
+    //compile group: 'com.google.protobuf', name: 'protoc', version: PROTOBUF_VERSION
+    // https://mvnrepository.com/artifact/com.google.protobuf/protobuf-java
+    compile group: 'com.google.protobuf', name: 'protobuf-java', version: PROTOBUF_VERSION
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Sybotan依赖
+//    compile group: 'com.sybotan', name: 'sybotan-kotlin-base', version: SYBOTAN_KOTLIN_VERSION
+//    compile group: 'com.sybotan', name: 'sybotan-kotlin-database', version: SYBOTAN_KOTLIN_VERSION
+//    compile group: 'com.sybotan', name: 'sybotan-service-base', version: SYBOTAN_SERVICE_VERSION
+//    compile group: 'com.sybotan', name: 'sybotan-service-mybatis', version: SYBOTAN_SERVICE_VERSION
+//    compile group: 'com.sybotan', name: 'sybotan-service-mongo', version: SYBOTAN_SERVICE_VERSION
+
+    // https://mvnrepository.com/artifact/org.mybatis/mybatis
+    compile group: 'org.mybatis', name: 'mybatis', version: '3.5.0'
+
+    // https://mvnrepository.com/artifact/org.mybatis/mybatis-guice
+    compile group: 'org.mybatis', name: 'mybatis-guice', version: '3.10'
+    // https://mvnrepository.com/artifact/org.yaml/snakeyaml
+    compile group: 'org.yaml', name: 'snakeyaml', version: '1.24'
+    // https://mvnrepository.com/artifact/com.google.inject/guice
+    compile group: 'com.google.inject', name: 'guice', version: '4.2.2'
+
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    // https://mvnrepository.com/artifact/mysql/mysql-connector-java
+    compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.15'
+
+}

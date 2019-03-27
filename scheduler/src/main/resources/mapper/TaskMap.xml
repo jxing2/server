@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.sagacloud.mybatis.mapper.TaskMapper">
+    <insert id="addTask" parameterType="cn.sagacloud.mybatis.model.TaskModel" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `task`(task_name, task_cmd, task_param, task_status, task_result_json, task_last_mac, task_expected_finish_time)
+        VALUE(#{task_name},#{task_cmd},#{task_param},#{task_status},#{task_result_json},#{task_last_mac},#{task_expected_finish_time});
+    </insert>
+
+    <insert id="addDownload" parameterType="cn.sagacloud.mybatis.model.DownloadTaskModel" useGeneratedKeys="true" keyProperty="list.id">
+        INSERT INTO `download`(task_id,task_url,task_md5) VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{taskId},#{item.task_url},#{item.task_md5})
+        </foreach>
+    </insert>
+</mapper>

@@ -1,0 +1,2 @@
+port: 6666
+mysql: server=127.0.0.1;uid=root;pwd=123456

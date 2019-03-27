@@ -1,0 +1,48 @@
+group 'com.sagacloud'
+version '1.0-SNAPSHOT'
+
+buildscript {
+    repositories {
+        //maven{url MAVEN_REPO_PUBLIC_URL}
+        maven{ url "http://maven.aliyun.com/nexus/content/groups/public/"}
+        mavenCentral()
+        jcenter()
+    }
+    dependencies {
+        //classpath group: 'org.springframework.boot', name: 'spring-boot-gradle-plugin', version: SPRING_BOOT_VERSION
+        //classpath group: 'org.jetbrains.kotlin', name: 'kotlin-gradle-plugin', version: KOTLIN_VERSION
+        //classpath group: 'org.jetbrains.dokka', name: 'dokka-gradle-plugin', version: DOKKA_VERSION
+        classpath group: 'com.google.protobuf', name: 'protobuf-gradle-plugin', version: PROTOBUF_GRADLE_VERSION
+        //classpath group: 'com.sybotan', name: 'sybotan-gradle-tools', version: SYBOTAN_KOTLIN_VERSION
+    }
+}
+
+allprojects {
+    repositories {
+//        maven{url MAVEN_REPO_PUBLIC_URL}
+        maven{ url "http://maven.aliyun.com/nexus/content/groups/public/"}
+        maven { url "https://repo.spring.io/milestone" }
+        mavenCentral()
+        jcenter()
+    }
+    tasks.withType(Javadoc) {
+        options{ encoding "UTF-8"
+            charSet "UTF-8"
+            links "http://docs.oracle.com/javase/8/docs/api"
+        }
+    }
+}
+
+//task dokkaAll(type: org.jetbrains.dokka.gradle.DokkaTask) {
+//    jdkVersion = 8
+//    outputFormat = "javadoc"
+//    outputDirectory = "$buildDir/javadoc"
+//    sourceDirs = files(
+//            "sybotan-service-core/src/main/kotlin",
+//            "sybotan-service-hbase/src/main/kotlin",
+//            "sybotan-service-mybatis/src/main/kotlin")
+//}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}

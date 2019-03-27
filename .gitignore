@@ -1,0 +1,17 @@
+src/main/.DS_Store
+src/main/resources/.DS_Store
+.DS_Store
+.idea
+*.iml
+log/*
+.classpath
+.project
+.settings/
+src/test/java/
+target/*
+.gradle
+scheduler/build
+scheduler/out
+gradle
+lib
+/src
