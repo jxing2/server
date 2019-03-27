@@ -7,7 +7,9 @@ import org.apache.ibatis.session.SqlSession;
 import org.mybatis.guice.transactional.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TaskDAO {
 
@@ -81,6 +83,55 @@ public class TaskDAO {
             session = MyBatisSqlSessionFactory.openSession();
             TaskMapper taskMapper = session.getMapper(TaskMapper.class);
             result = taskMapper.getTasksByStatus(statusList);
+            session.commit();
+        } catch (Exception ignore) {
+        } finally {
+            if (session != null)
+                session.close();
+        }
+        return result;
+    }
+
+    public boolean updateSingleTask(TaskModel task) {
+        SqlSession session = null;
+        try {
+            session = MyBatisSqlSessionFactory.openSession();
+            TaskMapper taskMapper = session.getMapper(TaskMapper.class);
+            int affectedRow = taskMapper.updateSingleTask(task);
+            session.commit();
+            return affectedRow > -1;
+        } catch (Exception e) {
+            return false;
+        } finally {
+            if (session != null)
+                session.close();
+        }
+    }
+
+
+    public Map<Integer, TaskModel> getAllTaskMapByStatus(List<Integer> statusList) {
+        SqlSession session = null;
+        Map<Integer, TaskModel> result = new HashMap<>();
+        try {
+            session = MyBatisSqlSessionFactory.openSession();
+            TaskMapper taskMapper = session.getMapper(TaskMapper.class);
+            result = taskMapper.getTasksMapByStatus(statusList);
+            session.commit();
+        } catch (Exception ignore) {
+        } finally {
+            if (session != null)
+                session.close();
+        }
+        return result;
+    }
+
+    public Map<Integer, TaskModel> getTaskMapByIds(List<Integer> idList) {
+        SqlSession session = null;
+        Map<Integer, TaskModel> result = new HashMap<>();
+        try {
+            session = MyBatisSqlSessionFactory.openSession();
+            TaskMapper taskMapper = session.getMapper(TaskMapper.class);
+            result = taskMapper.getTasksMapByIds(idList);
             session.commit();
         } catch (Exception ignore) {
         } finally {

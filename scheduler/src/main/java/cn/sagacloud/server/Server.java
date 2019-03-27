@@ -54,6 +54,7 @@ public class Server {
         // 初始化配置
         config = new Yaml().loadAs(Server.class.getClassLoader().getResourceAsStream("config.yml"), Config.class);
         // 初始化Task(从sql到内存)
+        DispatchTask dispatchTask = new DispatchTask();
 
     }
 
@@ -61,7 +62,8 @@ public class Server {
         try {
             // 启动服务
             channel = bootstrap.bind(config.getPort()).sync().channel();
-            //println("Revit Dispatcher start success $port");
+
+
             channel.closeFuture().sync();
         } finally {
             workerGroup.shutdownGracefully();

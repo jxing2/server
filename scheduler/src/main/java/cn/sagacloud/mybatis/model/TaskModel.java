@@ -11,7 +11,7 @@ public class TaskModel {
     private String task_param;
     private int task_status;
     private String task_result_json;
-    private String task_last_mac;
+    private String task_last_client;
     private long task_expected_finish_time;
 
     private List<DownloadTaskModel> downloadTaskModelList;
@@ -64,12 +64,12 @@ public class TaskModel {
         this.task_result_json = task_result_json;
     }
 
-    public String getTask_last_mac() {
-        return task_last_mac;
+    public String getTask_last_client() {
+        return task_last_client;
     }
 
-    public void setTask_last_mac(String task_last_mac) {
-        this.task_last_mac = task_last_mac;
+    public void setTask_last_client(String task_last_client) {
+        this.task_last_client = task_last_client;
     }
 
     public long getTask_expected_finish_time() {

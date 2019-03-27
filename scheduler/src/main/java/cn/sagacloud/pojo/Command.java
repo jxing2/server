@@ -14,7 +14,8 @@ public enum Command {
     AcceptTask,
     DownloadError,
     CommandError,
-    TaskSuccess;
+    TaskSuccess,
+    ClientInfo;
     private static ArrayList<Command> cmdList;
     static{
         cmdList = new ArrayList<>();
@@ -25,5 +26,13 @@ public enum Command {
             return cmdList.get(index);
         }
         return null;
+    }
+
+    public static int getIdByCmd(Command cmd) {
+        for(int i = 0; i < cmdList.size(); ++i){
+            if(cmdList.get(i).equals(cmd))
+                return i;
+        }
+        return -1;
     }
 }

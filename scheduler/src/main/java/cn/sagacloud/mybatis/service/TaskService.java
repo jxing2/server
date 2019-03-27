@@ -5,10 +5,7 @@ import cn.sagacloud.mybatis.model.TaskModel;
 import com.google.inject.*;
 import org.mybatis.guice.transactional.Transactional;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 public class TaskService {
     private TaskDAO taskDAO;
@@ -27,12 +24,14 @@ public class TaskService {
     }
     @Transactional
     public boolean updateTask(TaskModel task) throws Exception {
-        ArrayList<TaskModel> tasks = taskDAO.getTasksByIds(Arrays.asList(task.getId()));
-        if(tasks == null || tasks.size() == 0){
-            return true;
-        }
-        TaskModel prev = tasks.get(0);
-        return false;
+//        ArrayList<TaskModel> tasks = taskDAO.getTasksByIds(Arrays.asList(task.getId()));
+//        if(tasks == null || tasks.size() == 0){
+//            return true;
+//        }
+//        TaskModel prev = tasks.get(0);
+//
+        boolean result = taskDAO.updateSingleTask(task);
+        return result;
     }
 
 
@@ -47,6 +46,20 @@ public class TaskService {
         if(idList == null || idList.size() == 0)
             return new ArrayList<>();
         ArrayList<TaskModel> tasks = taskDAO.getTasksByIds(idList);
+        return tasks;
+    }
+
+    public Map<Integer, TaskModel> getAllTaskMapByStatus(List<Integer> statusList) throws Exception {
+        if(statusList == null || statusList.size() == 0)
+            return new HashMap<>();
+        Map<Integer, TaskModel> tasks = taskDAO.getAllTaskMapByStatus(statusList);
+        return tasks;
+    }
+
+    public Map<Integer, TaskModel> getTaskMapByIds(List<Integer> idList) throws Exception {
+        if(idList == null || idList.size() == 0)
+            return new HashMap<>();
+        Map<Integer, TaskModel> tasks = taskDAO.getTaskMapByIds(idList);
         return tasks;
     }
 }
