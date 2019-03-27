@@ -6,10 +6,44 @@
         VALUE(#{task_name},#{task_cmd},#{task_param},#{task_status},#{task_result_json},#{task_last_mac},#{task_expected_finish_time});
     </insert>
 
-    <insert id="addDownload" parameterType="cn.sagacloud.mybatis.model.DownloadTaskModel" useGeneratedKeys="true" keyProperty="list.id">
+    <insert id="addDownload" parameterType="cn.sagacloud.mybatis.model.DownloadTaskModel" useGeneratedKeys="true" keyProperty="list.">
         INSERT INTO `download`(task_id,task_url,task_md5) VALUES
         <foreach collection="list" item="item" separator=",">
             (#{taskId},#{item.task_url},#{item.task_md5})
         </foreach>
     </insert>
+
+    <select id="getTasksByIds" resultMap="taskModelList">
+        select task.id, task_name, task_cmd, task_param, task_status, task_result_json, task_last_mac,
+        task_expected_finish_time, download.id downloadId, task_id, task_url, task_md5
+        from `task` right join `download` on task.id = download.task_id where task.id in
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>;
+    </select>
+
+    <select id="getTasksByStatus" resultMap="taskModelList">
+        select task.id, task_name, task_cmd, task_param, task_status, task_result_json, task_last_mac,
+        task_expected_finish_time, download.id downloadId, task_id, task_url, task_md5
+        from `task` right join `download` on task.id = download.task_id where task.task_status in
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>;
+    </select>
+    <resultMap id="taskModelList" type="cn.sagacloud.mybatis.model.TaskModel">
+        <id property="id" column="id"/>
+        <result property="task_name" column="task_name"/>
+        <result property="task_cmd" column="task_cmd"/>
+        <result property="task_param" column="task_param"/>
+        <result property="task_status" column="task_status"/>
+        <result property="task_result_json" column="task_result_json"/>
+        <result property="task_last_mac" column="task_last_mac"/>
+        <result property="task_expected_finish_time" column="task_expected_finish_time"/>
+        <collection property="downloadTaskModelList" ofType="cn.sagacloud.mybatis.model.DownloadTaskModel">
+            <id property="id" column="downloadId"/>
+            <result property="task_id" column="task_id"/>
+            <result property="task_url" column="task_url"/>
+            <result property="task_md5" column="task_md5"/>
+        </collection>
+    </resultMap>
 </mapper>
