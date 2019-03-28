@@ -19,6 +19,7 @@ import io.netty.handler.codec.protobuf.ProtobufDecoder;
 import io.netty.handler.codec.protobuf.ProtobufEncoder;
 import io.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
 import io.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
+import org.apache.log4j.Logger;
 import org.yaml.snakeyaml.Yaml;
 
 import java.util.ArrayList;
@@ -32,8 +33,10 @@ public class Server {
     private Channel channel = null;
     public static ExecutorService pool = Executors.newFixedThreadPool(8);
     Config config;
+    DispatchTask dispatchTask;
     ArrayList<ChannelHandlerContextWrapper> clientList = new ArrayList<>();
-    public Server(){
+    private static Logger log = Logger.getLogger(Server.class);
+    public Server() throws Exception {
         // 初始化serverSocket
         bootstrap.group(acceptGroup, workerGroup)
                 .channel(NioServerSocketChannel.class)
@@ -55,18 +58,23 @@ public class Server {
         .option(ChannelOption.SO_BACKLOG, 128)
         .childOption(ChannelOption.SO_KEEPALIVE, true);
         // 初始化配置
+        log.info("开始读取配置文件...");
         config = new Yaml().loadAs(Server.class.getClassLoader().getResourceAsStream("config.yml"), Config.class);
+        log.info("读取配置文件完毕...");
         // 初始化Task(从sql到内存)
-        DispatchTask dispatchTask = new DispatchTask();
-
+        log.info("开始同步数据库中任务...");
+        dispatchTask = new DispatchTask(clientList);
     }
 
     public void start() throws InterruptedException {
         try {
             // 启动服务
+            log.info("开始启动监听...");
             channel = bootstrap.bind(config.getPort()).sync().channel();
-
+            log.info("开始分发任务...");
+            pool.submit(dispatchTask);
             //pool.submit()
+            log.info("服务器启动完毕");
             channel.closeFuture().sync();
         } finally {
             workerGroup.shutdownGracefully();

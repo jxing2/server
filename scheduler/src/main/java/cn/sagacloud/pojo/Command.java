@@ -21,18 +21,10 @@ public enum Command {
         cmdList = new ArrayList<>();
         cmdList.addAll(Arrays.asList(Command.values()));
     }
-    public static Command getCmdById(int index) {
-        if(index > -1 && index < cmdList.size()){
-            return cmdList.get(index);
-        }
-        return null;
-    }
-
-    public static int getIdByCmd(Command cmd) {
-        for(int i = 0; i < cmdList.size(); ++i){
-            if(cmdList.get(i).equals(cmd))
-                return i;
-        }
-        return -1;
+    // 是否是和任务状态转换相关的命令
+    public static boolean isStatusRelated(Command cmd){
+        if(ClientInfo.equals(cmd))
+            return false;
+        return true;
     }
 }

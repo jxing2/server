@@ -12,9 +12,18 @@ public class TaskModel {
     private int task_status;
     private String task_result_json;
     private String task_last_client;
+    private long task_sent_time;
     private long task_expected_finish_time;
 
     private List<DownloadTaskModel> downloadTaskModelList;
+
+    public long getTask_sent_time() {
+        return task_sent_time;
+    }
+
+    public void setTask_sent_time(long task_sent_time) {
+        this.task_sent_time = task_sent_time;
+    }
 
     public int getId() {
         return id;

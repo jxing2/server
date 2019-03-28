@@ -9,6 +9,8 @@ import cn.sagacloud.pojo.Command;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.Charset;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -29,4 +31,9 @@ public class CommonUtil {
         ByteBuffer bb = cs.encode(cb);
         return bb.array();
     }
+    public static long getTime() {
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+        return Long.parseLong(LocalDateTime.now().format(format));
+    }
+
 }
