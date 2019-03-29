@@ -34,6 +34,7 @@ public class Server {
     public static ExecutorService pool = Executors.newFixedThreadPool(8);
     Config config;
     DispatchTask dispatchTask;
+    MessageHandler messageHandler;
     ArrayList<ChannelHandlerContextWrapper> clientList = new ArrayList<>();
     private static Logger log = Logger.getLogger(Server.class);
     public Server() throws Exception {
@@ -64,6 +65,7 @@ public class Server {
         // 初始化Task(从sql到内存)
         log.info("开始同步数据库中任务...");
         dispatchTask = new DispatchTask(clientList);
+        messageHandler = new MessageHandler();
     }
 
     public void start() throws InterruptedException {
@@ -72,7 +74,8 @@ public class Server {
             log.info("开始启动监听...");
             channel = bootstrap.bind(config.getPort()).sync().channel();
             log.info("开始分发任务...");
-            pool.submit(dispatchTask);
+            pool.submit(dispatchTask);        // 开启任务分发线程
+            pool.submit(messageHandler);      // 开启消息处理线程
             //pool.submit()
             log.info("服务器启动完毕");
             channel.closeFuture().sync();

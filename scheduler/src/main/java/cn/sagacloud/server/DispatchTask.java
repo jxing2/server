@@ -43,14 +43,28 @@ public class DispatchTask implements Runnable {
             return null;
         return allowCmd.get(cmd);
     }
-
-    public static void changeStatusByCmd(int taskId, Command cmd) {
+    // 加锁
+    public static void changeStatusByCmd(int taskId, Command cmd, String clientInfo) {
         TaskStatus nextStatus = isAllowCmd(taskId, cmd);
         if(nextStatus == null)
             return;
         TaskModel task = DispatchTask.tasks.get(taskId);
         if(task == null)
             return;
+        task.setTask_last_client(clientInfo);
+        task.setTask_status(TaskStatus.getIdByTaskStatus(nextStatus));
+        updateTask(task);
+    }
+
+    public static void changeStatusByCmdWithReturnJson(int taskId, Command cmd, String clientInfo, String returnJson) {
+        TaskStatus nextStatus = isAllowCmd(taskId, cmd);
+        if(nextStatus == null)
+            return;
+        TaskModel task = DispatchTask.tasks.get(taskId);
+        if(task == null)
+            return;
+        task.setTask_last_client(clientInfo);
+        task.setTask_result_json(returnJson);
         task.setTask_status(TaskStatus.getIdByTaskStatus(nextStatus));
         updateTask(task);
     }
@@ -73,20 +87,32 @@ public class DispatchTask implements Runnable {
                 }
             }
             try {
-                Thread.sleep(1000);
+                Thread.sleep(5000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
+            }
+            if(cnt%20 == 0){
+                syncTask();
             }
         }
     }
 
+    private void syncTask() {
+        try {
+            Map<Integer, TaskModel> tmpTasks = service.getAllTaskMapByStatus(Arrays.asList(0, 1, 2));
+            tasks = tmpTasks;
+            log.error("同步数据库任务完成");
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("同步数据库失败");
+        }
+    }
+
     private void checkExecuteTimeOut() {
-        for(ChannelHandlerContextWrapper client : clientList){
-            int id = getOneExecuteTimeOutTaskId();
-            if(id > 0){
-                // 是否加锁
-                tasks.get(id).setTask_status(0);
-            }
+        int id = getOneExecuteTimeOutTaskId();
+        if(id > 0){
+            // 是否加锁
+            tasks.get(id).setTask_status(0);
         }
     }
     /**

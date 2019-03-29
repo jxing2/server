@@ -18,14 +18,14 @@ public class ChannelHandlerContextWrapper {
     private final long sendingTimeOut = 10;            // 发送给客户端任务, 如果超过该时间未响应, 则超时, 并将发送的任务状态置为初始状态
     private final long lastRefuseTimeOut = 3600;       // 如果客户端拒绝任务, 则等待lastRefuseTimeOut秒, 才会再分配任务给该客户端
     private long lastRefuseTime = 0L;
-    private String macAddr;             // mac地址
+    private String clientInfo;             // mac地址
     // 任务发送中状态map,     key --> taskid, value --> 发送任务时间点,    如果超过15s, 即为超时.
     private Map<Integer, Long> taskSendingStatusMap = new HashMap<>();
 
     public ChannelHandlerContextWrapper(ChannelHandlerContext ctx) {
         this.ctx = ctx;
         this.lastRejectTime = 0;
-        macAddr = null;
+        clientInfo = null;
     }
 
     public void sendTask(TaskModel toBeSent) {
@@ -53,12 +53,12 @@ public class ChannelHandlerContextWrapper {
         return -1;
     }
 
-    public String getMacAddr() {
-        return macAddr;
+    public String getClientInfo() {
+        return clientInfo;
     }
 
-    public void setMacAddr(String macAddr) {
-        this.macAddr = macAddr;
+    public void setClientInfo(String clientInfo) {
+        this.clientInfo = clientInfo;
     }
 
     public ChannelHandlerContext getCtx() {
@@ -69,10 +69,10 @@ public class ChannelHandlerContextWrapper {
         return lastRejectTime;
     }
 
-    public void setLastRejectTime(long lastRejectTime) {
-        this.lastRejectTime = lastRejectTime;
+    public void setLastRejectTime(int taskId) {
+        this.lastRejectTime = CommonUtil.getTime();
+        DispatchTask.changeStatusByCmd(taskId, Command.RefuseTask, clientInfo);
     }
-
 
     public boolean isLastRefuseTimeOutPassed() {
         if(lastRefuseTime == 0)
@@ -82,11 +82,23 @@ public class ChannelHandlerContextWrapper {
             return true;
         return false;
     }
-    // 是否加锁
+
     public void acceptTask(int taskId) {
         TaskStatus isAllow = DispatchTask.isAllowCmd(taskId, Command.AcceptTask);
         if(isAllow==null)
             return;
-        DispatchTask.changeStatusByCmd(taskId, Command.AcceptTask);
+        DispatchTask.changeStatusByCmd(taskId, Command.AcceptTask, clientInfo);
+    }
+
+    public void taskSuccess(MessageProto.Message message) {
+        DispatchTask.changeStatusByCmdWithReturnJson(message.getTaskId(), Command.TaskSuccess, clientInfo, message.getContent());
+    }
+
+    public void commandError(MessageProto.Message message) {
+        DispatchTask.changeStatusByCmdWithReturnJson(message.getTaskId(), Command.CommandError, clientInfo, message.getContent());
+    }
+
+    public void downloadError(MessageProto.Message message) {
+        DispatchTask.changeStatusByCmdWithReturnJson(message.getTaskId(), Command.DownloadError, clientInfo, message.getContent());
     }
 }

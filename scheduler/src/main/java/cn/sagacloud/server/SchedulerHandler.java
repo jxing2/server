@@ -5,11 +5,11 @@ package cn.sagacloud.server;
  */
 
 import cn.sagacloud.pojo.ChannelHandlerContextWrapper;
+import cn.sagacloud.pojo.ClientMessage;
 import cn.sagacloud.pojo.Command;
 import cn.sagacloud.pojo.TaskStatus;
 import cn.sagacloud.proto.MessageProto;
 import cn.sagacloud.proto.MessageUtil;
-import cn.sagacloud.utils.CommonUtil;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 
@@ -77,7 +77,7 @@ public class SchedulerHandler extends ChannelInboundHandlerAdapter {
     public void channelActive(ChannelHandlerContext ctx) {
         ctxw = new ChannelHandlerContextWrapper(ctx);
         this.clientList.add(ctxw);
-        //ctx.channel().writeAndFlush("connected !"+System.currentTimeMillis());
+        ctx.channel().writeAndFlush(MessageUtil.buildMessage(Command.ClientInfo.name(), 0, ""));
     }
 
     /**
@@ -91,10 +91,7 @@ public class SchedulerHandler extends ChannelInboundHandlerAdapter {
         try {
             // Do something with msg
             MessageProto.Message message = (MessageProto.Message)msg;
-            MessageUtil.printMessage(message);
-
-            MessageHandler.handle(message, ctxw);
-            //ctx.writeAndFlush(myMsg);  // 异步
+            MessageHandler.offer(new ClientMessage(ctxw, message));
         } finally {
             // 如果ctx write 或 writeAndFlush过的话, 就不用释放msg
             //ReferenceCountUtil.release(msg);
