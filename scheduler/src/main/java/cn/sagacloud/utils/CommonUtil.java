@@ -32,8 +32,7 @@ public class CommonUtil {
         return bb.array();
     }
     public static long getTime() {
-        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
-        return Long.parseLong(LocalDateTime.now().format(format));
+        return System.currentTimeMillis()/1000;
     }
 
 }

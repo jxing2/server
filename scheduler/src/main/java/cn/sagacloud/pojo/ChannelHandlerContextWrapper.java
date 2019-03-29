@@ -15,7 +15,7 @@ import java.util.Map;
 public class ChannelHandlerContextWrapper {
     private ChannelHandlerContext ctx;  // 通信handler
     private long lastRejectTime;        // unix时间片, 精确到秒
-    private final long sendingTimeOut = 10;            // 发送给客户端任务, 如果超过该时间未响应, 则超时, 并将发送的任务状态置为初始状态
+    private final long sendingTimeOut = 15;            // 发送给客户端任务, 如果超过该时间未响应, 则超时, 并将发送的任务状态置为初始状态
     private final long lastRefuseTimeOut = 3600;       // 如果客户端拒绝任务, 则等待lastRefuseTimeOut秒, 才会再分配任务给该客户端
     private long lastRefuseTime = 0L;
     private String clientInfo;             // mac地址
@@ -32,6 +32,7 @@ public class ChannelHandlerContextWrapper {
         if(ctx.channel().isActive()){
             MessageProto.Message msg = MessageUtil.buildMessage(Command.SendTask.name(), toBeSent.getId(), JSON.toJSONString(toBeSent));
             ctx.writeAndFlush(msg);
+            toBeSent.setTask_status(1);
             taskSendingStatusMap.put(toBeSent.getId(), CommonUtil.getTime());
         }
     }

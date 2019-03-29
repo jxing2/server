@@ -72,28 +72,34 @@ public class DispatchTask implements Runnable {
     @Override
     public void run() {
         // 考虑加锁
-        for(long cnt = Long.MAX_VALUE; cnt > Long.MIN_VALUE; --cnt) {
-            // 获取到一个在waiting状态的任务
-            TaskModel toBeSent = getOneAvailableTask();
-            if(toBeSent != null) {
-                // 获取到一个潜在可以接受任务的客户端
-                ChannelHandlerContextWrapper client = getOneAvailableClient();
-                if(client != null) {
-                    // 将获取到的任务发送给选中客户端
-                    client.sendTask(toBeSent);
-                    // 检测sending, sent状态的任务, 是否有超时需要重新下载的任务
-                    checkSendingTimeOut();
-                    checkExecuteTimeOut();
+        try {
+            for (long cnt = Long.MAX_VALUE; cnt > Long.MIN_VALUE; --cnt) {
+                // 获取到一个在waiting状态的任务
+                TaskModel toBeSent = getOneAvailableTask();
+                if (toBeSent != null) {
+                    // 获取到一个潜在可以接受任务的客户端
+                    ChannelHandlerContextWrapper client = getOneAvailableClient();
+                    if (client != null) {
+                        // 将获取到的任务发送给选中客户端
+                        client.sendTask(toBeSent);
+                    }
+                }
+                // 检测sending, sent状态的任务, 是否有超时需要重新下载的任务
+                checkSendingTimeOut();
+                checkExecuteTimeOut();
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                if (cnt % 500 == 0L) {
+                    syncTask();
+                    System.out.println(cnt);
                 }
             }
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            if(cnt%20 == 0){
-                syncTask();
-            }
+        }catch (Exception ex){
+            log.error(ex.getMessage());
+            System.out.println("出错");
         }
     }
 
@@ -113,6 +119,7 @@ public class DispatchTask implements Runnable {
         if(id > 0){
             // 是否加锁
             tasks.get(id).setTask_status(0);
+            System.out.println("任务" + id + "执行超时, 已重置");
         }
     }
     /**
@@ -142,6 +149,7 @@ public class DispatchTask implements Runnable {
             if(id > 0){
                 // 是否加锁
                 tasks.get(id).setTask_status(0);
+                System.out.println("任务" + id + "发送超时, 已重置");
             }
         }
     }
@@ -171,6 +179,8 @@ public class DispatchTask implements Runnable {
                 return null;
             clientIndex = (clientIndex + 1) % clientCount;
         }while(wrapper == null && clientIndex != 0);
+        if(wrapper != null)
+            System.out.println("当前选中index :" + clientIndex);
         return wrapper;
     }
 
