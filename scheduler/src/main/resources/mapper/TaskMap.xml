@@ -16,7 +16,7 @@
     <select id="getTasksByIds" resultMap="taskModelList">
         select task.id, task_name, task_cmd, task_param, task_status, task_result_json, task_sent_time, task_last_client,
         task_expected_finish_time, download.id downloadId, task_id, task_url, task_md5
-        from `task` right join `download` on task.id = download.task_id where task.id in
+        from `task` inner join `download` on task.id = download.task_id where task.id in
         <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
             #{item}
         </foreach>;
@@ -25,7 +25,7 @@
     <select id="getTasksByStatus" resultMap="taskModelList">
         select task.id, task_name, task_cmd, task_param, task_status, task_result_json, task_sent_time, task_last_client,
         task_expected_finish_time, download.id downloadId, task_id, task_url, task_md5
-        from `task` right join `download` on task.id = download.task_id where task.task_status in
+        from `task` inner join `download` on task.id = download.task_id where task.task_status in
         <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
             #{item}
         </foreach>;
@@ -34,7 +34,7 @@
     <select id="getTasksMapByIds" resultMap="taskModelList">
         select task.id, task_name, task_cmd, task_param, task_status, task_result_json, task_sent_time, task_last_client,
         task_expected_finish_time, download.id downloadId, task_id, task_url, task_md5
-        from `task` right join `download` on task.id = download.task_id where task.id in
+        from `task` inner join `download` on task.id = download.task_id where task.id in
         <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
             #{item}
         </foreach>;
@@ -43,7 +43,7 @@
     <select id="getTasksMapByStatus" resultMap="taskModelList">
         select task.id, task_name, task_cmd, task_param, task_status, task_result_json, task_sent_time, task_last_client,
         task_expected_finish_time, download.id downloadId, task_id, task_url, task_md5
-        from `task` right join `download` on task.id = download.task_id where task.task_status in
+        from `task` inner join `download` on task.id = download.task_id where task.task_status in
         <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
             #{item}
         </foreach>;

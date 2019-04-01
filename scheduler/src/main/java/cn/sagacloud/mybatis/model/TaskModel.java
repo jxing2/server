@@ -1,6 +1,8 @@
 package cn.sagacloud.mybatis.model;
 
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,9 +11,12 @@ public class TaskModel {
     private String task_name;
     private String task_cmd;
     private String task_param;
+    @JSONField(serialize=false)
     private int task_status;
     private String task_result_json;
+    @JSONField(serialize=false)
     private String task_last_client;
+    @JSONField(serialize=false)
     private long task_sent_time;
     private long task_expected_finish_time;
 
