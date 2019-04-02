@@ -17,7 +17,6 @@ public class ChannelHandlerContextWrapper {
     private long lastRejectTime;        // unix时间片, 精确到秒
     private final long sendingTimeOut = 15;            // 发送给客户端任务, 如果超过该时间未响应, 则超时, 并将发送的任务状态置为初始状态
     private final long lastRefuseTimeOut = 3600;       // 如果客户端拒绝任务, 则等待lastRefuseTimeOut秒, 才会再分配任务给该客户端
-    private long lastRefuseTime = 0L;
     private String clientInfo;             // mac地址
     // 任务发送中状态map,     key --> taskid, value --> 发送任务时间点,    如果超过15s, 即为超时.
     private Map<Integer, Long> taskSendingStatusMap = new HashMap<>();
@@ -76,10 +75,10 @@ public class ChannelHandlerContextWrapper {
     }
 
     public boolean isLastRefuseTimeOutPassed() {
-        if(lastRefuseTime == 0)
+        if(lastRejectTime == 0)
             return true;
         long currentTime = CommonUtil.getTime();
-        if(currentTime - lastRefuseTimeOut > lastRefuseTime)
+        if(currentTime - lastRefuseTimeOut > lastRejectTime)
             return true;
         return false;
     }
@@ -89,6 +88,7 @@ public class ChannelHandlerContextWrapper {
         if(isAllow==null)
             return;
         DispatchTask.changeStatusByCmd(taskId, Command.AcceptTask, clientInfo);
+        taskSendingStatusMap.remove(taskId);
     }
 
     public void taskSuccess(MessageProto.Message message) {

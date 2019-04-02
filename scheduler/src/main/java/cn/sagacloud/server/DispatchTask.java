@@ -51,6 +51,7 @@ public class DispatchTask implements Runnable {
         TaskModel task = DispatchTask.tasks.get(taskId);
         if(task == null)
             return;
+        task.setTask_sent_time(CommonUtil.getTime());
         task.setTask_last_client(clientInfo);
         task.setTask_status(TaskStatus.getIdByTaskStatus(nextStatus));
         updateTask(task);
@@ -196,12 +197,13 @@ public class DispatchTask implements Runnable {
         return null;
     }
 
-    private static void updateTask(TaskModel task){
+    private static boolean updateTask(TaskModel task){
         try {
-            service.updateTask(task);
+            return service.updateTask(task);
         } catch (Exception e) {
             e.printStackTrace();
             log.error("任务:" + task.getId() + "update失败");
+            return false;
         }
     }
 }
