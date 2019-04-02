@@ -94,7 +94,6 @@ public class DispatchTask implements Runnable {
                 }
                 if (cnt % 500 == 0L) {
                     syncTask();
-                    System.out.println(cnt);
                 }
             }
         }catch (Exception ex){
@@ -107,7 +106,7 @@ public class DispatchTask implements Runnable {
         try {
             Map<Integer, TaskModel> tmpTasks = service.getAllTaskMapByStatus(Arrays.asList(0, 1, 2));
             tasks = tmpTasks;
-            log.error("同步数据库任务完成");
+            log.info("同步数据库任务完成");
         } catch (Exception e) {
             e.printStackTrace();
             log.error("同步数据库失败");
