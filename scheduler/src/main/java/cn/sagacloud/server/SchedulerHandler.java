@@ -65,7 +65,7 @@ public class SchedulerHandler extends ChannelInboundHandlerAdapter {
      */
     @Override
     public void handlerAdded(ChannelHandlerContext ctx) {
-        SocketAddress addr = ctx.channel().remoteAddress();
+        //SocketAddress addr = ctx.channel().remoteAddress();
         System.out.println("client incoming");
     }
 

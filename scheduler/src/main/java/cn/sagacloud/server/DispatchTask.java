@@ -172,10 +172,10 @@ public class DispatchTask implements Runnable {
                 wrapper = null;
                 clientCount = clientList.size();
             }
-            if(!wrapper.isLastRefuseTimeOutPassed()){
+            if(wrapper == null || !wrapper.isLastRefuseTimeOutPassed()){
                 wrapper = null;
             }
-            if(wrapper.getClientInfo() == null || wrapper.getClientInfo().length() == 0)
+            if(wrapper == null || wrapper.getClientInfo() == null || wrapper.getClientInfo().length() == 0)
                 wrapper = null;
             if(clientCount == 0)
                 return null;
