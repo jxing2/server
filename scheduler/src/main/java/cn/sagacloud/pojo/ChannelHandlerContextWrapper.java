@@ -52,6 +52,12 @@ public class ChannelHandlerContextWrapper {
         }
         return -1;
     }
+    
+    public void resetSendingTimeOutTask(int id){
+        if(id > 0){
+            taskSendingStatusMap.remove(id);
+        }
+    }
 
     public String getClientInfo() {
         return clientInfo;
