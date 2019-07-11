@@ -149,6 +149,7 @@ public class DispatchTask implements Runnable {
             if(id > 0){
                 // 是否加锁
                 tasks.get(id).setTask_status(0);
+                client.resetSendingTimeOutTask(id);
                 System.out.println("任务" + id + "发送超时, 已重置");
             }
         }
