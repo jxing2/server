@@ -136,7 +136,7 @@ public class DispatchTask implements Runnable {
             long sendTime = task.getTask_sent_time();
             if(sendTime <= 0)
                 continue;
-            if(currentTime  - sendTime > expectTime){
+            if(currentTime  - sendTime > expectTime && task.getTask_status() != 0){
                 return id;
             }
         }
