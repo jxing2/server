@@ -124,10 +124,12 @@ public class SchedulerHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void handlerRemoved(ChannelHandlerContext ctx) {
         this.clientList.remove(ctxw);
-        for(Integer taskId : ctxw.taskSendingStatusMap.keySet()){
-            if(DispatchTask.tasks.containsKey(taskId)){
-                DispatchTask.tasks.get(taskId).setTask_status(0);
+        try {
+            for (Integer taskId : ctxw.taskSendingStatusMap.keySet()) {
+                if (DispatchTask.tasks.containsKey(taskId)) {
+                    DispatchTask.tasks.get(taskId).setTask_status(0);
+                }
             }
-        }
+        }catch (Exception ignore){}
     }
 }
