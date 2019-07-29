@@ -19,7 +19,7 @@ public class ChannelHandlerContextWrapper {
     private final long lastRefuseTimeOut = 3600;       // 如果客户端拒绝任务, 则等待lastRefuseTimeOut秒, 才会再分配任务给该客户端
     private String clientInfo;             // mac地址
     // 任务发送中状态map,     key --> taskid, value --> 发送任务时间点,    如果超过15s, 即为超时.
-    private Map<Integer, Long> taskSendingStatusMap = new HashMap<>();
+    public Map<Integer, Long> taskSendingStatusMap = new HashMap<>();
 
     public ChannelHandlerContextWrapper(ChannelHandlerContext ctx) {
         this.ctx = ctx;

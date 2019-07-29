@@ -66,6 +66,7 @@ public class Server {
         log.info("开始同步数据库中任务...");
         dispatchTask = new DispatchTask(clientList);
         messageHandler = new MessageHandler();
+        log.info("初始化完成...");
     }
 
     public void start() throws InterruptedException {
